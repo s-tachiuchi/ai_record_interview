@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 from flask import (Blueprint, abort, flash, redirect,
                    render_template, request, url_for, send_file)
 from flask_login import current_user, login_required, login_user, logout_user
-import json, os
+import json, os, re
 
 from app.models import Account, Applicant, Company, InterviewSession, Job, db
 
@@ -101,13 +101,46 @@ def company_toggle(cid: int):
     flash(f"企業を{'有効化' if c.is_active else '無効化'}しました", "success")
     return redirect(url_for("admin.companies"))
 
-# ── 企業アカウント管理 ────────────────────────────────────────────────────────
+# ── アカウント管理（管理画面にログインできるアカウント） ─────────────────────
+
+MIN_PASSWORD_LEN = 8
+EMAIL_RE = re.compile(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$")
+
+
+def _active_admin_count() -> int:
+    return Account.query.filter_by(role="admin", is_active=True).count()
+
+
+def _validate_account_form(form, account=None):
+    """追加・編集共通のバリデーション。エラー文字列 or None を返す"""
+    email = form.get("email", "").strip().lower()
+    name = form.get("name", "").strip()
+    pw = form.get("password", "")
+    pw_confirm = form.get("password_confirm", "")
+    if not name:
+        return "氏名を入力してください"
+    if not EMAIL_RE.match(email):
+        return "メールアドレスの形式が正しくありません"
+    if not form.get("company_id", "").isdigit():
+        return "企業を選択してください"
+    dup = Account.query.filter(Account.email == email)
+    if account:
+        dup = dup.filter(Account.id != account.id)
+    if dup.first():
+        return "そのメールアドレスは既に使用されています"
+    if account is None or pw or pw_confirm:
+        if len(pw) < MIN_PASSWORD_LEN:
+            return f"パスワードは{MIN_PASSWORD_LEN}文字以上で入力してください"
+        if pw != pw_confirm:
+            return "パスワードと確認用パスワードが一致しません"
+    return None
+
 
 @bp.get("/accounts")
 @login_required
 def accounts():
     return render_template("admin/accounts.html",
-                           accounts=Account.query.order_by(Account.created_at.desc()).all())
+                           accounts=Account.query.order_by(Account.created_at.asc()).all())
 
 @bp.get("/accounts/new")
 @login_required
@@ -118,16 +151,16 @@ def account_new():
 @bp.post("/accounts/new")
 @login_required
 def account_create():
-    pw = request.form.get("password", "")
-    if pw != request.form.get("password_confirm", ""):
-        flash("パスワードが一致しません", "error"); return redirect(url_for("admin.account_new"))
-    if len(pw) < 8:
-        flash("パスワードは8文字以上で入力してください", "error"); return redirect(url_for("admin.account_new"))
-    if Account.query.filter_by(email=request.form["email"]).first():
-        flash("そのメールアドレスは既に使用されています", "error"); return redirect(url_for("admin.account_new"))
-    a = Account(company_id=int(request.form["company_id"]), name=request.form["name"],
-                email=request.form["email"], role=request.form.get("role", "company"))
-    a.set_password(pw); db.session.add(a); db.session.commit()
+    err = _validate_account_form(request.form)
+    if err:
+        flash(err, "error"); return redirect(url_for("admin.account_new"))
+    a = Account(company_id=int(request.form["company_id"]),
+                name=request.form["name"].strip(),
+                email=request.form["email"].strip().lower(),
+                role=request.form.get("role", "company"),
+                is_active=True)
+    a.set_password(request.form["password"])
+    db.session.add(a); db.session.commit()
     flash("アカウントを作成しました", "success")
     return redirect(url_for("admin.accounts"))
 
@@ -141,14 +174,20 @@ def account_edit(aid: int):
 @login_required
 def account_update(aid: int):
     a = Account.query.get_or_404(aid)
-    a.company_id=int(request.form["company_id"]); a.name=request.form["name"]
-    a.email=request.form["email"]; a.role=request.form.get("role", "company")
+    err = _validate_account_form(request.form, account=a)
+    if err:
+        flash(err, "error"); return redirect(url_for("admin.account_edit", aid=aid))
+    new_role = request.form.get("role", "company")
+    # 有効なシステム管理者が 0 人になる変更は拒否
+    if a.role == "admin" and a.is_active and new_role != "admin" and _active_admin_count() <= 1:
+        flash("有効なシステム管理者が1人もいなくなるため、権限を変更できません", "error")
+        return redirect(url_for("admin.account_edit", aid=aid))
+    a.company_id = int(request.form["company_id"])
+    a.name = request.form["name"].strip()
+    a.email = request.form["email"].strip().lower()
+    a.role = new_role
     pw = request.form.get("password", "")
     if pw:
-        if pw != request.form.get("password_confirm", ""):
-            flash("パスワードが一致しません", "error"); return redirect(url_for("admin.account_edit", aid=aid))
-        if len(pw) < 8:
-            flash("パスワードは8文字以上", "error"); return redirect(url_for("admin.account_edit", aid=aid))
         a.set_password(pw)
     db.session.commit()
     flash("アカウントを更新しました", "success")
@@ -159,11 +198,40 @@ def account_update(aid: int):
 def account_toggle(aid: int):
     a = Account.query.get_or_404(aid)
     if a.id == current_user.id:
-        flash("自分自身のアカウントは変更できません", "error")
+        flash("自分自身のアカウントは無効化できません", "error")
+        return redirect(url_for("admin.accounts"))
+    if a.is_active and a.role == "admin" and _active_admin_count() <= 1:
+        flash("有効なシステム管理者が1人もいなくなるため無効化できません", "error")
         return redirect(url_for("admin.accounts"))
     a.is_active = not a.is_active; db.session.commit()
-    flash(f"アカウントを{'有効化' if a.is_active else '無効化'}しました", "success")
+    flash(f"{a.email} を{'有効化' if a.is_active else '無効化'}しました", "success")
     return redirect(url_for("admin.accounts"))
+
+# ── 自分のパスワード変更 ──────────────────────────────────────────────────────
+
+@bp.get("/password")
+@login_required
+def password_form():
+    return render_template("admin/change_password.html")
+
+@bp.post("/password")
+@login_required
+def password_update():
+    current = request.form.get("current_password", "")
+    new = request.form.get("new_password", "")
+    confirm = request.form.get("new_password_confirm", "")
+    if not current_user.check_password(current):
+        flash("現在のパスワードが正しくありません", "error")
+    elif len(new) < MIN_PASSWORD_LEN:
+        flash(f"新しいパスワードは{MIN_PASSWORD_LEN}文字以上で入力してください", "error")
+    elif new != confirm:
+        flash("新しいパスワードと確認用パスワードが一致しません", "error")
+    elif current_user.check_password(new):
+        flash("現在のパスワードと同じものは設定できません", "error")
+    else:
+        current_user.set_password(new); db.session.commit()
+        flash("パスワードを変更しました", "success")
+    return redirect(url_for("admin.password_form"))
 
 # ── 求人管理 ──────────────────────────────────────────────────────────────────
 

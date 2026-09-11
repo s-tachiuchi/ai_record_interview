@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // フラッシュメッセージの自動消去
   setTimeout(function () {
-    document.querySelectorAll('.alert').forEach(function (el) {
+    document.querySelectorAll('.alert:not([data-no-autohide])').forEach(function (el) {
       el.style.transition = 'opacity .5s';
       el.style.opacity = '0';
       setTimeout(function () { el.remove(); }, 500);

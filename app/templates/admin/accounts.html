@@ -1,0 +1,71 @@
+{% extends "admin/base.html" %}
+{% block title %}アカウント管理{% endblock %}
+{% block page_title %}アカウント管理{% endblock %}
+
+{% block content %}
+<div class="alert alert-info" data-no-autohide>
+  <i class="fas fa-info-circle"></i>
+  ここで登録したアカウントは、この管理画面にログインして操作できます。無効化したアカウントは即座にログインできなくなります。
+</div>
+
+<div class="toolbar">
+  <a href="/admin/accounts/new" class="btn btn-primary"><i class="fas fa-plus"></i> アカウントを追加</a>
+  <div class="toolbar-right">
+    <a href="/admin/password" class="btn btn-outline"><i class="fas fa-key"></i> 自分のパスワードを変更</a>
+  </div>
+</div>
+
+<div class="card">
+  <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>氏名</th>
+          <th>メールアドレス</th>
+          <th>権限</th>
+          <th>企業名</th>
+          <th>ステータス</th>
+          <th>最終ログイン</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in accounts %}
+        <tr>
+          <td>
+            <strong>{{ a.name }}</strong>
+            {% if a.id == current_user.id %}<span class="badge badge-company">自分</span>{% endif %}
+          </td>
+          <td>{{ a.email }}</td>
+          <td>
+            <span class="badge badge-{{ a.role }}">
+              {{ 'システム管理者' if a.role == 'admin' else '企業担当者' }}
+            </span>
+          </td>
+          <td>{{ a.company.name if a.company else '-' }}</td>
+          <td>
+            <span class="badge badge-{{ 'active' if a.is_active else 'inactive' }}">
+              {{ '有効' if a.is_active else '無効' }}
+            </span>
+          </td>
+          <td>{{ a.last_login_at.strftime('%Y/%m/%d %H:%M') if a.last_login_at else '未ログイン' }}</td>
+          <td class="actions">
+            <a href="/admin/accounts/{{ a.id }}/edit" class="btn btn-sm btn-outline" title="編集"><i class="fas fa-edit"></i></a>
+            {% if a.id != current_user.id %}
+            <form method="POST" action="/admin/accounts/{{ a.id }}/toggle" style="display:inline"
+                  data-confirm="{{ a.email }} を{{ '有効化' if not a.is_active else '無効化' }}しますか？{{ '' if not a.is_active else '\nこのアカウントはログインできなくなります。' }}">
+              <button type="submit" class="btn btn-sm {{ 'btn-success' if not a.is_active else 'btn-danger' }}" title="{{ '有効化' if not a.is_active else '無効化' }}">
+                <i class="fas fa-{{ 'check' if not a.is_active else 'ban' }}"></i>
+              </button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="text-center text-muted" style="padding:32px">アカウントがありません</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
