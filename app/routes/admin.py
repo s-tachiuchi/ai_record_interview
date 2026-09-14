@@ -6,6 +6,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 import json, os, re
 
 from app.models import Account, Applicant, Company, InterviewSession, Job, db
+from app.avatars import AVATARS, normalize_avatar_key
 
 bp = Blueprint("admin", __name__)
 
@@ -244,7 +245,7 @@ def jobs():
 @bp.get("/jobs/new")
 @login_required
 def job_new():
-    return render_template("admin/job_form.html", job=None,
+    return render_template("admin/job_form.html", job=None, avatars=AVATARS,
                            companies=Company.query.filter_by(is_active=True).all())
 
 @bp.post("/jobs/new")
@@ -256,7 +257,8 @@ def job_create():
             requirements=request.form.get("requirements") or None,
             evaluation_criteria=request.form.get("evaluation_criteria") or None,
             questions=qs,
-            max_duration_minutes=int(request.form.get("max_duration_minutes", 30)))
+            max_duration_minutes=int(request.form.get("max_duration_minutes", 30)),
+            avatar_key=normalize_avatar_key(request.form.get("avatar_key")))
     db.session.add(j); db.session.commit()
     flash("求人を登録しました", "success")
     return redirect(url_for("admin.jobs"))
@@ -264,7 +266,7 @@ def job_create():
 @bp.get("/jobs/<int:jid>/edit")
 @login_required
 def job_edit(jid: int):
-    return render_template("admin/job_form.html", job=Job.query.get_or_404(jid),
+    return render_template("admin/job_form.html", job=Job.query.get_or_404(jid), avatars=AVATARS,
                            companies=Company.query.filter_by(is_active=True).all())
 
 @bp.post("/jobs/<int:jid>/edit")
@@ -277,6 +279,7 @@ def job_update(jid: int):
     j.requirements=request.form.get("requirements") or None
     j.evaluation_criteria=request.form.get("evaluation_criteria") or None
     j.questions=qs; j.max_duration_minutes=int(request.form.get("max_duration_minutes", 30))
+    j.avatar_key=normalize_avatar_key(request.form.get("avatar_key"))
     db.session.commit()
     flash("求人情報を更新しました", "success")
     return redirect(url_for("admin.jobs"))

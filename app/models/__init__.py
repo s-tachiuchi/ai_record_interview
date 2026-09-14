@@ -63,11 +63,18 @@ class Job(db.Model):
     # 面接設定
     questions = db.Column(db.JSON, default=list)      # 事前設定質問リスト
     max_duration_minutes = db.Column(db.Integer, default=30)
+    avatar_key = db.Column(db.String(30), default="robot")  # AI面接官アバター（app/avatars.py）
     is_active = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime(timezone=True), default=utcnow)
 
     company = db.relationship("Company", back_populates="jobs")
     applicants = db.relationship("Applicant", back_populates="job")
+
+    @property
+    def safe_avatar_key(self) -> str:
+        """未設定・不正値の場合はデフォルトのアバターに倒す"""
+        from app.avatars import normalize_avatar_key
+        return normalize_avatar_key(self.avatar_key)
 
 
 class Applicant(db.Model):

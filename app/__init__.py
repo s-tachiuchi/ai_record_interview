@@ -54,9 +54,22 @@ def create_app():
 
     with app.app_context():
         db.create_all()
+        _migrate_schema()
         _seed_initial_data()
 
     return app
+
+
+def _migrate_schema():
+    """create_all では追加されない既存テーブルの新カラムを安全に追加する"""
+    from sqlalchemy import inspect, text
+
+    insp = inspect(db.engine)
+    job_cols = {c["name"] for c in insp.get_columns("jobs")}
+    if "avatar_key" not in job_cols:
+        db.session.execute(text("ALTER TABLE jobs ADD COLUMN avatar_key VARCHAR(30) DEFAULT 'robot'"))
+        db.session.commit()
+        print("[migrate] jobs.avatar_key column added")
 
 
 def _seed_initial_data():

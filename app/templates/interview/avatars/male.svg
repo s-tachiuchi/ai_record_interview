@@ -1,0 +1,35 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="av-svg" aria-hidden="true">
+  <defs>
+    <radialGradient id="ml-bg" cx="50%" cy="40%" r="65%">
+      <stop offset="0" stop-color="#1e3a5f"/><stop offset="1" stop-color="#0f172a"/>
+    </radialGradient>
+  </defs>
+  <circle cx="100" cy="100" r="100" fill="url(#ml-bg)"/>
+  <!-- スーツ -->
+  <path d="M36,200 Q44,154 76,148 L100,160 L124,148 Q156,154 164,200 Z" fill="#1f2937"/>
+  <!-- シャツ -->
+  <path d="M84,150 L100,170 L116,150 L108,160 L100,158 L92,160 Z" fill="#f8fafc"/>
+  <!-- ネクタイ -->
+  <path d="M96,158 L104,158 L106,184 L100,192 L94,184 Z" fill="#2563eb"/>
+  <!-- 首 -->
+  <rect x="87" y="128" width="26" height="28" rx="8" fill="#e8b892"/>
+  <!-- 耳 -->
+  <ellipse cx="59" cy="102" rx="6.5" ry="9" fill="#e8b892"/>
+  <ellipse cx="141" cy="102" rx="6.5" ry="9" fill="#e8b892"/>
+  <!-- 顔 -->
+  <path d="M62,80 Q62,50 100,50 Q138,50 138,80 L136,116 Q130,146 100,148 Q70,146 64,116 Z" fill="#f2c39c"/>
+  <!-- 髪 -->
+  <path d="M60,86 Q58,44 100,42 Q142,44 140,86 Q132,62 100,64 Q68,62 60,86 Z" fill="#2b1d16"/>
+  <!-- 眉 -->
+  <path d="M74,84 Q83,79 92,83" stroke="#2b1d16" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M108,83 Q117,79 126,84" stroke="#2b1d16" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- 目 -->
+  <g class="av-eye"><ellipse cx="83" cy="97" rx="6.5" ry="6.5" fill="#241a14"/><circle cx="85.5" cy="94.5" r="2" fill="#fff"/></g>
+  <g class="av-eye"><ellipse cx="117" cy="97" rx="6.5" ry="6.5" fill="#241a14"/><circle cx="119.5" cy="94.5" r="2" fill="#fff"/></g>
+  <!-- 鼻 -->
+  <path d="M96,110 Q100,116 104,110" stroke="#d29c74" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+  <!-- 口 -->
+  <path id="av-mouth" d="M89,126 Q100,132 111,126"
+        data-closed="M89,126 Q100,132 111,126" data-open="M89,123 Q100,140 111,123"
+        stroke="#b9636a" stroke-width="2.5" fill="#b9636a" fill-opacity=".25" stroke-linecap="round"/>
+</svg>
