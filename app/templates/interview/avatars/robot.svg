@@ -1,27 +1,82 @@
 <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="av-svg" aria-hidden="true">
   <defs>
-    <linearGradient id="rb-bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#8b5cf6"/>
+    <radialGradient id="rb-bg" cx="50%" cy="38%" r="68%">
+      <stop offset="0" stop-color="#3b4a7a"/><stop offset="1" stop-color="#0f172a"/>
+    </radialGradient>
+    <linearGradient id="rb-metal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f1f5f9"/><stop offset=".45" stop-color="#cbd5e1"/><stop offset="1" stop-color="#94a3b8"/>
+    </linearGradient>
+    <linearGradient id="rb-metal-dark" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#94a3b8"/><stop offset="1" stop-color="#64748b"/>
+    </linearGradient>
+    <linearGradient id="rb-visor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1e293b"/><stop offset="1" stop-color="#0b1220"/>
+    </linearGradient>
+    <radialGradient id="rb-eye" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#e0f2fe"/><stop offset=".35" stop-color="#38bdf8"/><stop offset="1" stop-color="#0369a1"/>
+    </radialGradient>
+    <radialGradient id="rb-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#38bdf8" stop-opacity=".55"/><stop offset="1" stop-color="#38bdf8" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="rb-body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e2e8f0"/><stop offset="1" stop-color="#94a3b8"/>
     </linearGradient>
   </defs>
+
   <circle cx="100" cy="100" r="100" fill="url(#rb-bg)"/>
+
+  <!-- 胴体 -->
+  <path d="M40,200 C44,168 66,158 100,158 C134,158 156,168 160,200 Z" fill="url(#rb-body)"/>
+  <path d="M100,158 C134,158 156,168 160,200 L100,200 Z" fill="#000" opacity=".12"/>
+  <rect x="88" y="168" width="24" height="10" rx="3" fill="#334155"/>
+  <circle cx="100" cy="173" r="2.5" fill="#38bdf8"/>
+
+  <!-- 首（ジョイント） -->
+  <rect x="86" y="142" width="28" height="18" rx="5" fill="url(#rb-metal-dark)"/>
+  <rect x="86" y="148" width="28" height="3" fill="#475569" opacity=".6"/>
+  <rect x="86" y="154" width="28" height="3" fill="#475569" opacity=".6"/>
+
   <!-- アンテナ -->
-  <rect x="96" y="30" width="8" height="22" rx="4" fill="#cbd5e1"/>
-  <circle cx="100" cy="28" r="9" fill="#f59e0b"/>
-  <!-- 頭 -->
-  <rect x="42" y="52" width="116" height="96" rx="24" fill="#e2e8f0"/>
-  <rect x="52" y="62" width="96" height="76" rx="18" fill="#1e293b"/>
-  <!-- 耳 -->
-  <rect x="30" y="86" width="12" height="28" rx="6" fill="#94a3b8"/>
-  <rect x="158" y="86" width="12" height="28" rx="6" fill="#94a3b8"/>
+  <rect x="97" y="28" width="6" height="22" rx="3" fill="url(#rb-metal-dark)"/>
+  <circle cx="100" cy="26" r="7" fill="#f59e0b"/>
+  <circle cx="98" cy="24" r="2.5" fill="#fde68a"/>
+
+  <!-- 耳（センサー） -->
+  <rect x="30" y="84" width="14" height="32" rx="7" fill="url(#rb-metal-dark)"/>
+  <rect x="34" y="92" width="6" height="16" rx="3" fill="#334155"/>
+  <rect x="156" y="84" width="14" height="32" rx="7" fill="url(#rb-metal-dark)"/>
+  <rect x="160" y="92" width="6" height="16" rx="3" fill="#334155"/>
+
+  <!-- 頭部 -->
+  <rect x="42" y="50" width="116" height="98" rx="26" fill="url(#rb-metal)"/>
+  <path d="M52,66 C60,54 80,52 100,52 C120,52 140,54 148,66 C136,58 116,56 100,56 C84,56 64,58 52,66 Z" fill="#fff" opacity=".55"/>
+  <path d="M42,120 L42,122 C42,136 54,148 68,148 L132,148 C146,148 158,136 158,122 L158,120 Z" fill="#000" opacity=".10"/>
+  <!-- パネルの継ぎ目 -->
+  <path d="M56,132 L144,132" stroke="#64748b" stroke-width="1.2" opacity=".6"/>
+  <circle cx="60" cy="140" r="1.6" fill="#475569"/><circle cx="140" cy="140" r="1.6" fill="#475569"/>
+
+  <!-- バイザー -->
+  <rect x="52" y="64" width="96" height="58" rx="18" fill="url(#rb-visor)"/>
+  <rect x="54" y="66" width="92" height="54" rx="16" fill="none" stroke="#38bdf8" stroke-width="1" opacity=".35"/>
+  <path d="M60,70 C70,66 130,66 140,70" stroke="#fff" stroke-width="1.2" fill="none" opacity=".18"/>
+
   <!-- 目 -->
-  <g class="av-eye"><ellipse cx="78" cy="92" rx="11" ry="12" fill="#60a5fa"/><circle cx="81" cy="88" r="3.5" fill="#fff"/></g>
-  <g class="av-eye"><ellipse cx="122" cy="92" rx="11" ry="12" fill="#60a5fa"/><circle cx="125" cy="88" r="3.5" fill="#fff"/></g>
-  <!-- 口 -->
-  <path id="av-mouth" d="M80,120 Q100,126 120,120"
-        data-closed="M80,120 Q100,126 120,120" data-open="M80,116 Q100,136 120,116"
-        stroke="#60a5fa" stroke-width="5" fill="none" stroke-linecap="round"/>
-  <!-- 首・胴 -->
-  <rect x="86" y="148" width="28" height="14" fill="#94a3b8"/>
-  <rect x="60" y="160" width="80" height="40" rx="14" fill="#cbd5e1"/>
+  <g class="av-eye">
+    <circle cx="78" cy="92" r="18" fill="url(#rb-glow)"/>
+    <ellipse cx="78" cy="92" rx="11" ry="12" fill="url(#rb-eye)"/>
+    <ellipse cx="78" cy="92" rx="5" ry="5.5" fill="#0c4a6e"/>
+    <circle cx="81" cy="88" r="3" fill="#fff" opacity=".9"/>
+  </g>
+  <g class="av-eye">
+    <circle cx="122" cy="92" r="18" fill="url(#rb-glow)"/>
+    <ellipse cx="122" cy="92" rx="11" ry="12" fill="url(#rb-eye)"/>
+    <ellipse cx="122" cy="92" rx="5" ry="5.5" fill="#0c4a6e"/>
+    <circle cx="125" cy="88" r="3" fill="#fff" opacity=".9"/>
+  </g>
+
+  <!-- 口（発光スリット・アニメーション対象） -->
+  <path d="M78,112 Q100,118 122,112" stroke="#0ea5e9" stroke-width="9" fill="none" stroke-linecap="round" opacity=".25"/>
+  <path id="av-mouth" d="M80,112 Q100,117 120,112"
+        data-closed="M80,112 Q100,117 120,112" data-open="M80,109 Q100,127 120,109"
+        stroke="#7dd3fc" stroke-width="4" fill="none" stroke-linecap="round"/>
 </svg>

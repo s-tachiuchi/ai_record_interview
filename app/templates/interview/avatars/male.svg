@@ -1,35 +1,114 @@
 <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="av-svg" aria-hidden="true">
   <defs>
-    <radialGradient id="ml-bg" cx="50%" cy="40%" r="65%">
-      <stop offset="0" stop-color="#1e3a5f"/><stop offset="1" stop-color="#0f172a"/>
+    <radialGradient id="ml-bg" cx="50%" cy="38%" r="68%">
+      <stop offset="0" stop-color="#1f3f6b"/><stop offset="1" stop-color="#0f172a"/>
     </radialGradient>
+    <radialGradient id="ml-skin" cx="50%" cy="34%" r="72%">
+      <stop offset="0" stop-color="#f9d9bd"/><stop offset=".65" stop-color="#e9b892"/><stop offset="1" stop-color="#c8926c"/>
+    </radialGradient>
+    <linearGradient id="ml-neck" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c48a64"/><stop offset="1" stop-color="#e3b18c"/>
+    </linearGradient>
+    <linearGradient id="ml-hair" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a2519"/><stop offset=".6" stop-color="#22140d"/><stop offset="1" stop-color="#160c07"/>
+    </linearGradient>
+    <linearGradient id="ml-jacket" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b3a55"/><stop offset="1" stop-color="#131b2b"/>
+    </linearGradient>
+    <linearGradient id="ml-tie" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2563eb"/><stop offset="1" stop-color="#1e3a8a"/>
+    </linearGradient>
+    <radialGradient id="ml-iris" cx="45%" cy="40%" r="60%">
+      <stop offset="0" stop-color="#6b4630"/><stop offset=".7" stop-color="#2e1c12"/><stop offset="1" stop-color="#150b06"/>
+    </radialGradient>
+    <linearGradient id="ml-lip" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b8746c"/><stop offset="1" stop-color="#9c5c56"/>
+    </linearGradient>
+    <clipPath id="ml-eye-l"><path d="M69,98 Q82,89 95,98 Q82,106 69,98 Z"/></clipPath>
+    <clipPath id="ml-eye-r"><path d="M105,98 Q118,89 131,98 Q118,106 105,98 Z"/></clipPath>
   </defs>
+
   <circle cx="100" cy="100" r="100" fill="url(#ml-bg)"/>
+
   <!-- スーツ -->
-  <path d="M36,200 Q44,154 76,148 L100,160 L124,148 Q156,154 164,200 Z" fill="#1f2937"/>
+  <path d="M30,200 C36,158 64,150 84,148 L100,164 L116,148 C136,150 164,158 170,200 Z" fill="url(#ml-jacket)"/>
+  <!-- 襟（ラペル） -->
+  <path d="M84,148 L100,164 L90,184 L78,160 Z" fill="#334666"/>
+  <path d="M116,148 L100,164 L110,184 L122,160 Z" fill="#334666"/>
+  <path d="M84,148 L100,164 L90,184 L84,176 Z" fill="#000" opacity=".18"/>
   <!-- シャツ -->
-  <path d="M84,150 L100,170 L116,150 L108,160 L100,158 L92,160 Z" fill="#f8fafc"/>
+  <path d="M86,146 L100,166 L114,146 L108,158 L100,156 L92,158 Z" fill="#f8fafc"/>
   <!-- ネクタイ -->
-  <path d="M96,158 L104,158 L106,184 L100,192 L94,184 Z" fill="#2563eb"/>
+  <path d="M95,156 L105,156 L108,188 L100,196 L92,188 Z" fill="url(#ml-tie)"/>
+  <path d="M95,156 L105,156 L104,161 L96,161 Z" fill="#1e40af"/>
+  <path d="M100,156 L105,156 L108,188 L100,196 Z" fill="#000" opacity=".15"/>
+
   <!-- 首 -->
-  <rect x="87" y="128" width="26" height="28" rx="8" fill="#e8b892"/>
+  <path d="M86,136 L86,158 Q100,166 114,158 L114,136 Q100,148 86,136 Z" fill="url(#ml-neck)"/>
+  <path d="M86,136 Q100,148 114,136 L114,144 Q100,154 86,144 Z" fill="#000" opacity=".18"/>
+
   <!-- 耳 -->
-  <ellipse cx="59" cy="102" rx="6.5" ry="9" fill="#e8b892"/>
-  <ellipse cx="141" cy="102" rx="6.5" ry="9" fill="#e8b892"/>
+  <ellipse cx="60" cy="102" rx="7" ry="10" fill="#dca682"/>
+  <path d="M59,97 Q55,103 60,108" stroke="#b47a58" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+  <ellipse cx="140" cy="102" rx="7" ry="10" fill="#dca682"/>
+  <path d="M141,97 Q145,103 140,108" stroke="#b47a58" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+
   <!-- 顔 -->
-  <path d="M62,80 Q62,50 100,50 Q138,50 138,80 L136,116 Q130,146 100,148 Q70,146 64,116 Z" fill="#f2c39c"/>
-  <!-- 髪 -->
-  <path d="M60,86 Q58,44 100,42 Q142,44 140,86 Q132,62 100,64 Q68,62 60,86 Z" fill="#2b1d16"/>
+  <path d="M60,84 C60,54 78,44 100,44 C122,44 140,54 140,84 C141,108 135,130 121,142 C113,150 87,150 79,142 C65,130 59,108 60,84 Z" fill="url(#ml-skin)"/>
+  <path d="M121,142 C135,130 141,108 140,84 C140,100 136,122 126,134 C122,139 118,142 121,142 Z" fill="#000" opacity=".08"/>
+  <path d="M79,142 C65,130 59,108 60,84 C60,100 64,122 74,134 C78,139 82,142 79,142 Z" fill="#000" opacity=".08"/>
+  <!-- あごの陰影 -->
+  <path d="M78,128 C84,146 116,146 122,128 C116,140 84,140 78,128 Z" fill="#7a4a34" opacity=".10"/>
+
   <!-- 眉 -->
-  <path d="M74,84 Q83,79 92,83" stroke="#2b1d16" stroke-width="3" fill="none" stroke-linecap="round"/>
-  <path d="M108,83 Q117,79 126,84" stroke="#2b1d16" stroke-width="3" fill="none" stroke-linecap="round"/>
-  <!-- 目 -->
-  <g class="av-eye"><ellipse cx="83" cy="97" rx="6.5" ry="6.5" fill="#241a14"/><circle cx="85.5" cy="94.5" r="2" fill="#fff"/></g>
-  <g class="av-eye"><ellipse cx="117" cy="97" rx="6.5" ry="6.5" fill="#241a14"/><circle cx="119.5" cy="94.5" r="2" fill="#fff"/></g>
+  <path d="M69,88 C74,81 85,79 96,85 C86,83.5 77,85.5 70,91 Z" fill="#241610"/>
+  <path d="M131,88 C126,81 115,79 104,85 C114,83.5 123,85.5 130,91 Z" fill="#241610"/>
+
+  <!-- 目（左） -->
+  <g class="av-eye">
+    <path d="M69,98 Q82,89 95,98 Q82,106 69,98 Z" fill="#fff"/>
+    <g clip-path="url(#ml-eye-l)">
+      <circle cx="83" cy="98.5" r="6.4" fill="url(#ml-iris)"/>
+      <circle cx="83" cy="98.5" r="2.9" fill="#080402"/>
+      <circle cx="85.3" cy="96.2" r="1.8" fill="#fff"/>
+      <path d="M69,98 Q82,89 95,98 Q82,93 69,98 Z" fill="#000" opacity=".14"/>
+    </g>
+    <path d="M69,98 Q82,88 95,97.5" stroke="#1e120b" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M72,102 Q82,106 93,101" stroke="#a5704e" stroke-width=".9" fill="none" opacity=".7"/>
+  </g>
+  <!-- 目（右） -->
+  <g class="av-eye">
+    <path d="M105,98 Q118,89 131,98 Q118,106 105,98 Z" fill="#fff"/>
+    <g clip-path="url(#ml-eye-r)">
+      <circle cx="117" cy="98.5" r="6.4" fill="url(#ml-iris)"/>
+      <circle cx="117" cy="98.5" r="2.9" fill="#080402"/>
+      <circle cx="119.3" cy="96.2" r="1.8" fill="#fff"/>
+      <path d="M105,98 Q118,89 131,98 Q118,93 105,98 Z" fill="#000" opacity=".14"/>
+    </g>
+    <path d="M105,97.5 Q118,88 131,98" stroke="#1e120b" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M107,101 Q118,106 128,102" stroke="#a5704e" stroke-width=".9" fill="none" opacity=".7"/>
+  </g>
+
   <!-- 鼻 -->
-  <path d="M96,110 Q100,116 104,110" stroke="#d29c74" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-  <!-- 口 -->
-  <path id="av-mouth" d="M89,126 Q100,132 111,126"
-        data-closed="M89,126 Q100,132 111,126" data-open="M89,123 Q100,140 111,123"
-        stroke="#b9636a" stroke-width="2.5" fill="#b9636a" fill-opacity=".25" stroke-linecap="round"/>
+  <path d="M97,103 C93,110 92,117 96,120 Q100,122 104,120 C108,117 107,110 103,103" stroke="#b27a58" stroke-width="1.3" fill="none" opacity=".6" stroke-linecap="round"/>
+  <ellipse cx="96.3" cy="119.5" rx="1.8" ry="1.1" fill="#9c6242" opacity=".5"/>
+  <ellipse cx="103.7" cy="119.5" rx="1.8" ry="1.1" fill="#9c6242" opacity=".5"/>
+
+  <!-- 唇 -->
+  <path d="M87,129 Q93,125.5 100,128 Q107,125.5 113,129 Q100,131.5 87,129 Z" fill="url(#ml-lip)"/>
+  <path d="M87,129 Q100,138 113,129 Q100,132.5 87,129 Z" fill="#c9857c"/>
+  <!-- 口の開き（アニメーション対象） -->
+  <path id="av-mouth" d="M89,129 Q100,130.5 111,129 Q100,131 89,129 Z"
+        data-closed="M89,129 Q100,130.5 111,129 Q100,131 89,129 Z"
+        data-open="M90,128 Q100,129.5 110,128 Q109,141 100,143 Q91,141 90,128 Z"
+        fill="#3f1a1c"/>
+
+  <!-- 髪 -->
+  <path d="M58,88 C56,48 76,36 100,36 C124,36 144,48 142,88 C138,68 124,58 100,60 C76,58 62,68 58,88 Z" fill="url(#ml-hair)"/>
+  <path d="M66,74 C74,56 88,50 100,50" stroke="#6b4530" stroke-width="1.6" fill="none" opacity=".5" stroke-linecap="round"/>
+  <path d="M110,50 C122,52 132,60 136,74" stroke="#6b4530" stroke-width="1.4" fill="none" opacity=".4" stroke-linecap="round"/>
+  <path d="M84,48 C92,44 108,44 116,48" stroke="#7d5238" stroke-width="1.2" fill="none" opacity=".45" stroke-linecap="round"/>
+  <!-- もみあげ -->
+  <path d="M58,88 C58,96 60,104 62,110 C64,102 64,94 66,90 Z" fill="url(#ml-hair)"/>
+  <path d="M142,88 C142,96 140,104 138,110 C136,102 136,94 134,90 Z" fill="url(#ml-hair)"/>
 </svg>

@@ -56,7 +56,7 @@
 .avatar-option input { position: absolute; opacity: 0; pointer-events: none; }
 .avatar-option:has(input:checked) { border-color: #2563eb; background: #eff6ff; box-shadow: 0 0 0 2px rgba(37,99,235,.15); }
 .avatar-thumb { width: 72px; height: 72px; border-radius: 50%; overflow: hidden; display: block; }
-.avatar-thumb svg { width: 100%; height: 100%; display: block; }
+.avatar-thumb svg, .avatar-thumb img { width: 100%; height: 100%; display: block; object-fit: cover; }
 .avatar-label { font-size: 12px; font-weight: 600; color: #334155; }
 </style>
 
@@ -104,7 +104,8 @@
         {% for a in avatars %}
         <label class="avatar-option">
           <input type="radio" name="avatar_key" value="{{ a.key }}" {% if current_avatar == a.key %}checked{% endif %}>
-          <span class="avatar-thumb">{% include 'interview/avatars/' ~ a.key ~ '.svg' %}</span>
+          {% set av = avatar_assets(a.key) %}
+          <span class="avatar-thumb">{% if av.type == 'image' %}<img src="{{ av.src }}" alt="">{% else %}{% include av.template %}{% endif %}</span>
           <span class="avatar-label">{{ a.label }}</span>
         </label>
         {% endfor %}

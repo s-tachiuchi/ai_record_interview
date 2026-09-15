@@ -17,7 +17,7 @@
     .ai-panel { background: #1e293b; border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 12px 16px 14px; min-height: 0; overflow: hidden; }
     /* アバターはパネルの空きスペースいっぱいに広げる（正円を維持） */
     .ai-avatar { flex: 1 1 0; min-height: 0; width: auto; max-width: 100%; aspect-ratio: 1 / 1; border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    .ai-avatar svg { width: 100%; height: 100%; display: block; }
+    .ai-avatar svg, .ai-avatar img { width: 100%; height: 100%; display: block; object-fit: cover; }
     .ai-avatar.speaking { animation: ring 1.2s infinite; }
     .av-eye { transform-box: fill-box; transform-origin: center; animation: av-blink 4.6s infinite; }
     @keyframes av-blink { 0%,94%,100%{transform:scaleY(1)} 97%{transform:scaleY(.08)} }
@@ -92,7 +92,10 @@
 <!-- メイン -->
 <div class="main">
   <div class="ai-panel">
-    <div class="ai-avatar" id="ai-avatar">{% include 'interview/avatars/' ~ job.safe_avatar_key ~ '.svg' %}</div>
+    {% set av = avatar_assets(job.avatar_key) %}
+    <div class="ai-avatar" id="ai-avatar"{% if av.type == 'image' and av.src_open %} data-open="{{ av.src_open }}"{% endif %}>
+      {% if av.type == 'image' %}<img id="av-img" src="{{ av.src }}" alt="AI面接官">{% else %}{% include av.template %}{% endif %}
+    </div>
     <div class="ai-name">AI面接官</div>
     <div class="subtitle-box" id="subtitle-box">
       <div class="subtitle-label off" id="subtitle-label">発言内容</div>
@@ -166,17 +169,26 @@ var btnFinish      = document.getElementById("btn-finish");
 var recDot         = document.getElementById("rec-dot");
 
 // ── アバターの口パク ───────────────────────────────────────────────────────────
-var avMouth    = aiAvatar ? aiAvatar.querySelector("#av-mouth") : null;
-var mouthTimer = null;
+// SVG の場合は口のパスを、画像の場合は閉じ/開きの 2 枚を切り替える
+var avMouth     = aiAvatar ? aiAvatar.querySelector("#av-mouth") : null;
+var avImg       = document.getElementById("av-img");
+var avImgClosed = avImg ? avImg.getAttribute("src") : null;
+var avImgOpen   = (aiAvatar && aiAvatar.dataset.open) ? aiAvatar.dataset.open : null;
+if (avImgOpen) { var _avPreload = new Image(); _avPreload.src = avImgOpen; }
+var mouthTimer  = null;
 function startMouth() {
-  if (!avMouth || mouthTimer) return;
+  if (mouthTimer) return;
+  if (!avMouth && !(avImg && avImgOpen)) return;
   mouthTimer = setInterval(function() {
-    avMouth.setAttribute("d", Math.random() > 0.45 ? avMouth.dataset.open : avMouth.dataset.closed);
-  }, 130);
+    var open = Math.random() > 0.45;
+    if (avMouth) avMouth.setAttribute("d", open ? avMouth.dataset.open : avMouth.dataset.closed);
+    if (avImg && avImgOpen) avImg.src = open ? avImgOpen : avImgClosed;
+  }, 150);
 }
 function stopMouth() {
   if (mouthTimer) { clearInterval(mouthTimer); mouthTimer = null; }
   if (avMouth) avMouth.setAttribute("d", avMouth.dataset.closed);
+  if (avImg && avImgClosed) avImg.src = avImgClosed;
 }
 
 // ── 字幕 ─────────────────────────────────────────────────────────────────────

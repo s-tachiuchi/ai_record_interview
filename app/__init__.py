@@ -32,6 +32,9 @@ def create_app():
 
     db.init_app(app)
 
+    from .avatars import avatar_assets
+    app.jinja_env.globals["avatar_assets"] = avatar_assets
+
     login_manager = LoginManager()
     login_manager.login_view = "admin.login"
     login_manager.init_app(app)
